@@ -1,1 +1,74 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- RES -->
+    <script src="../res/bootstrap.js"></script>
+    <script src="../res/download.js"></script>
+    <link href="../res/minty.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="../">Pascal The Elf</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+            </ul>
+        </div>
+    </nav>
+    
+    <fieldset>
+        <legend>SRT File</legend>
+        <div class="form-group">
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile02">
+                    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                </div>
+                <div class="input-group-append" onclick="conv(document.getElementById('inputGroupFile02').files[0])">
+                    <span class="input-group-text" id="">Convert</span>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    
+    <script>
+        function srt2vtt(srt) {
+            var vtt = "WEBVTT \n\n";
+            
+            var split = srt.split("\n\n");
+            for(var i = 0; i < split.length; i++) {
+                try {
+                    var part = split[i].split("\n");
+                    vtt += part[1].split(",").join(".") + "\n";
+                    for(var j = 2; j < part.length; j++) {
+                        vtt += part[j] + "\n";
+                    }
+                    vtt += "\n";
+                }
+                catch(e) {
+                    alert("ERROR.");
+                }
+            }
+            return vtt;
+        }
+        function conv(file) {
+            try {
+                var reader = new FileReader();
+                reader.onload = function (event) {
+                    download(srt2vtt(event.target.result), file.name.substr(0, file.name.lastIndexOf("."))+".vtt", "text/vtt");
+                };
+                reader.readAsText(file);
+            }
+            catch(e) {
+                alert("ERROR.");
+            }
+        }
+    </script>
+</body>
+</html>
